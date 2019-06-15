@@ -13,7 +13,7 @@ Total number of items: 62
 
 
 
-stuff = {'rope': 1, 'torch': 6, 'gold coin': 42, 'dagger': 1, 'arrow': 12}
+
 
 def displayInventory(inventory):
     if inventory:
@@ -25,4 +25,6 @@ def displayInventory(inventory):
         print("Total number of items: " + str(item_total))
     else: print("No Inventory")
         
-displayInventory(stuff)
+if __name__ == "__main__":
+    stuff = {'rope': 1, 'torch': 6, 'gold coin': 42, 'dagger': 1, 'arrow': 12}
+    displayInventory(stuff)
