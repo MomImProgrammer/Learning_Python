@@ -1,13 +1,13 @@
 from string import ascii_lowercase
 
 def validate(position):
-    if  position[0] in ('Q','R','B'):
-        if position[1] in (ascii_lowercase[0:8]) and int(position[2]) in range(1,9):
-            return ''
+    if  position[0] in ('Q','R','B') and len(position)==3:
+        if is_on_board(to_pos(position[1:3])):
+            return ""
         else:
-            return 'Your piece is not on the board. Try again.'
+            return "Your piece is not on the board. Try again."
     else:
-        return 'Position must start with \'Q\', \'R\', \'B\'. Try again.'
+        return "Position must start with 'Q', 'R', 'B' and be 3-char length. Try again."
 
 def rook_moves(rook_position):
     moves = []
@@ -19,18 +19,38 @@ def rook_moves(rook_position):
             moves.append(j+rook_position[1])
     return moves
 
+def is_on_board(pos):
+    return 0 <= pos[0] <= 7 and 0 <= pos[1] <= 7
+
+def to_coord(pos):
+    coord = ascii_lowercase[pos[0]]+str(pos[1]+1)
+    return coord
+
+def to_pos(coord):
+    horiz_index = ascii_lowercase.index(coord[0])
+    vert_index = int(coord[1]) - 1
+    return (horiz_index, vert_index)
+
 def bishop_moves(bishop_position):
+
     moves = []
-    horiz_index = ascii_lowercase[0:8].index(bishop_position[0])    
-    for i in range(1,8):        
-        if horiz_index+i in range(0, 8) and int(bishop_position[1])+i in range(1, 9):
-            moves.append(ascii_lowercase[horiz_index+i]+str(int(bishop_position[1])+i))
-        if horiz_index-i in range(0, 8) and int(bishop_position[1])+i in range(1, 9):
-            moves.append(ascii_lowercase[horiz_index-i]+str(int(bishop_position[1])+i))
-        if horiz_index+i in range(0, 8) and int(bishop_position[1])-i in range(1, 9):
-            moves.append(ascii_lowercase[horiz_index+i]+str(int(bishop_position[1])-i))
-        if horiz_index-i in range(0, 8) and int(bishop_position[1])-i in range(1, 9):
-            moves.append(ascii_lowercase[horiz_index-i]+str(int(bishop_position[1])-i))
+    horiz_index, vert_index = to_pos(bishop_position)
+
+    for i in range(1,8):
+
+        north_east = (horiz_index + i, vert_index + i)
+        north_west = (horiz_index + i, vert_index - i)
+        south_east = (horiz_index - i, vert_index + i)
+        south_west = (horiz_index - i, vert_index - i)
+
+        if is_on_board(north_east):
+            moves.append(to_coord(north_east))
+        if is_on_board(south_east):
+            moves.append(to_coord(south_east))
+        if is_on_board(north_west):
+            moves.append(to_coord(north_west))
+        if is_on_board(south_west):
+            moves.append(to_coord(south_west))
     return moves
 
 def display_moves(position, moves_list):
